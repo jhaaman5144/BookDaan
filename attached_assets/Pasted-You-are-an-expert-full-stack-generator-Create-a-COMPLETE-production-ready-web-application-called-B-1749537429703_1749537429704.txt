@@ -1,0 +1,167 @@
+You are an expert full‑stack generator. Create a COMPLETE production‑ready web application called “BookDaan” that runs entirely inside a single Next.js 14 codebase (App Router).
+The deliverable must be a working Replit project with the following stack, structure and features.
+
+1. TECH STACK
+
+Next.js 14 (React 18, App Router) with TypeScript throughout.
+
+Tailwind CSS + shadcn/ui for styling and components.
+
+MongoDB Atlas for data; access via Mongoose ODM.
+
+Auth: NextAuth.js (credentials + Google provider) using JWT strategy.
+
+Image uploads: Next Cloudinary or uploadthing.
+
+Environment variables handled with next-env and .env.example.
+
+ESLint, Prettier, Husky, Commitlint, & Git hooks pre-configured.
+
+Testing: Vitest + React Testing Library + supertest for API routes.
+
+CI: GitHub Actions workflow that runs lint, type-check, and tests.
+
+Seed + migration scripts (npm run seed, npm run migrate).
+
+README with local dev, production deploy & Replit directions.
+
+2. DOMAIN MODELS (Mongoose)
+
+User: { _id, role: 'donor' | 'recipient' | 'admin', name, email, passwordHash, photo, address, phone, preferences:[String], createdAt }
+
+Book: { _id, title, author, isbn, category, language, condition, coverImageUrl, description, donorId → User, status: 'available' | 'requested' | 'donated', createdAt }
+
+Request: { _id, bookId → Book, recipientId → User, message, status: 'pending' | 'accepted' | 'rejected' | 'completed', pickupLocation, createdAt }
+
+Feedback: { _id, fromId → User, toId → User, requestId → Request, rating 1–5, comment, createdAt }
+
+Notification: { _id, userId → User, type, message, isRead, createdAt }
+
+3. API ROUTES (REST under /api)
+
+Auth: /api/auth/(register|login|session) using NextAuth callbacks.
+
+Books: CRUD for donors, public GET /api/books?search=&category=&page=.
+
+Requests:
+
+POST /api/requests (recipient requests a book)
+
+PATCH /api/requests/:id/status (donor/admin updates)
+
+Recommendations: GET /api/recommendations returns 5 books algorithmically chosen from user preferences + collaborative filtering (use simple cosine-similarity placeholder with TensorFlow.js).
+
+Notifications: realtime via Next.js Server Actions + pusher.js (or Ably).
+
+Admin: protected CRUD endpoints for users & books.
+
+4. FRONTEND PAGES & ROUTES
+
+Public:
+
+/ Home (hero section, mission statement, CTA buttons)
+
+/auth/(login|register) forms with zod validation
+
+/books/[id] Book detail with “Request” button
+
+/about & /success-stories (static MDX pages)
+
+Donor Dashboard /dashboard/donor:
+
+Stats cards (donations, requests)
+
+Book manager table (edit/delete/mark donated)
+
+“Add Book” modal with image upload
+
+Recipient Dashboard /dashboard/recipient:
+
+Recommended shelf
+
+Request tracking table
+
+Admin Panel /admin:
+
+User manager (search, ban/unban)
+
+Book moderation queue
+
+Site analytics (donations, users, CO₂ saved estimate)
+
+Shared Components: Navbar (role-based), Footer, BookCard, RequestStatusBadge, ProtectedRoute, Toasts
+
+5. BUSINESS LOGIC
+
+Donors create books; recipients create requests.
+
+Request triggers notification + email to donor.
+
+Request approval updates book status; completion marks it donated.
+
+Recommender merges user preferences + global trends + text similarity (TF-IDF).
+
+Pickup is free-text (pickup location saved to Request).
+
+Feedback unlocks after donation completion; updates donor rating.
+
+All routes rate-limited and validated.
+
+6. SECURITY & ACCESS CONTROL
+
+JWT in httpOnly cookies (30-day rolling session)
+
+Bcrypt password hashing (12 rounds)
+
+Helmet, CORS, CSRF enabled
+
+Input validation via Zod
+
+Environment secrets never committed
+
+7. DEVELOPER EXPERIENCE
+
+Reusable lib/dbConnect.ts for Mongo connection
+
+Custom useAuth() React hook
+
+Storybook for core UI components
+
+VSCode config: auto-format, import sort
+
+Pre-commit test + lint
+
+GitHub Actions CI: lint, test, type-check
+
+8. SEED DATA
+
+On npm run seed:
+
+Create 1 admin, 2 donors, 2 recipients
+
+Insert 10 sample books using OpenLibrary covers
+
+9. DELIVERY & DEPLOYMENT
+
+Must run on Replit with npm run dev
+
+Include .replit & .env.example
+
+README.md with instructions for:
+
+Local setup
+
+Replit secrets
+
+Vercel deployment
+
+Include /docs/ folder with:
+
+ER Diagram
+
+Use-case diagram
+
+Comment placeholders for mobile app, Razorpay or other payment integration
+
+Logical Git commits: init → models → auth → books → UI → tests → docs
+
