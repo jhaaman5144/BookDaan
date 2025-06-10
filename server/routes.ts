@@ -6,15 +6,44 @@ import { insertBookSchema, insertRequestSchema, insertFeedbackSchema, updateUser
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // Simple auth routes for development
+  app.get('/api/login', (req, res) => {
+    // For development, create a demo user session
+    const demoUser = {
+      id: 'demo-user-1',
+      email: 'demo@bookdaan.com',
+      firstName: 'Demo',
+      lastName: 'User',
+      role: 'donor'
+    };
+    
+    // Set session
+    (req as any).session = (req as any).session || {};
+    (req as any).session.user = demoUser;
+    
+    // Redirect to home
+    res.redirect('/');
+  });
+
+  app.get('/api/logout', (req, res) => {
+    (req as any).session = null;
+    res.redirect('/');
+  });
+
+  // Simple auth middleware
+  const simpleAuth = (req: any, res: any, next: any) => {
+    const user = req.session?.user;
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    req.user = user;
+    next();
+  };
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', simpleAuth, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      res.json(req.user);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
