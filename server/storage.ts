@@ -150,7 +150,7 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (status) {
-      conditions.push(eq(books.status, status));
+      conditions.push(eq(books.status, status as any));
     }
     
     if (conditions.length > 0) {

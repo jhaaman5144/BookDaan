@@ -63,12 +63,10 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/books">
-              <a className={`font-medium transition-colors ${
+            <Link href="/books" className={`font-medium transition-colors ${
                 location === "/books" ? "text-primary-600" : "text-slate-700 hover:text-primary-600"
               }`}>
                 Browse Books
-              </a>
             </Link>
             <a href="#" className="text-slate-700 hover:text-primary-600 font-medium transition-colors">
               How it Works
@@ -157,10 +155,8 @@ export default function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-slate-200">
-            <Link href="/books">
-              <a className="block px-3 py-2 text-slate-700 hover:text-primary-600 font-medium">
-                Browse Books
-              </a>
+            <Link href="/books" className="block px-3 py-2 text-slate-700 hover:text-primary-600 font-medium">
+              Browse Books
             </Link>
             <a href="#" className="block px-3 py-2 text-slate-700 hover:text-primary-600 font-medium">
               How it Works
@@ -171,10 +167,8 @@ export default function Navbar() {
             
             {isAuthenticated && user ? (
               <>
-                <Link href={getDashboardLink()}>
-                  <a className="block px-3 py-2 text-slate-700 hover:text-primary-600 font-medium">
-                    Dashboard
-                  </a>
+                <Link href={getDashboardLink()} className="block px-3 py-2 text-slate-700 hover:text-primary-600 font-medium">
+                  Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
