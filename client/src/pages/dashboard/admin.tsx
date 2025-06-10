@@ -22,14 +22,17 @@ export default function AdminDashboard() {
 
   const { data: stats } = useQuery({
     queryKey: ["/api/admin/stats"],
+    enabled: isAuthenticated && user?.role === "admin",
   });
 
   const { data: users } = useQuery({
     queryKey: ["/api/admin/users"],
+    enabled: isAuthenticated && user?.role === "admin",
   });
 
   const { data: allBooks } = useQuery({
     queryKey: ["/api/books?limit=100"],
+    enabled: isAuthenticated && user?.role === "admin",
   });
 
   if (!user || user.role !== "admin") {

@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Login from "@/pages/login";
+import Landing from "@/pages/landing";
 import Books from "@/pages/books";
 import BookDetail from "@/pages/book-detail";
 import DonorDashboard from "@/pages/dashboard/donor";
@@ -27,21 +28,25 @@ function Router() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/books" component={Books} />
-        <Route path="/books/:id" component={BookDetail} />
-        {isAuthenticated && (
-          <>
+      {!isAuthenticated ? (
+        <Switch>
+          <Route path="/" component={Landing} />
+          <Route component={Landing} />
+        </Switch>
+      ) : (
+        <>
+          <Navbar />
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/books" component={Books} />
+            <Route path="/books/:id" component={BookDetail} />
             <Route path="/dashboard/donor" component={DonorDashboard} />
             <Route path="/dashboard/recipient" component={RecipientDashboard} />
             <Route path="/dashboard/admin" component={AdminDashboard} />
-          </>
-        )}
-        <Route component={NotFound} />
-      </Switch>
+            <Route component={NotFound} />
+          </Switch>
+        </>
+      )}
     </div>
   );
 }
